@@ -339,7 +339,7 @@ export default {
   },
   methods: {
     onFormBack () {
-      console.log("@onForm123BackEvent!");
+      console.log('@onFormBackEvent!')
     },
     // ??
     onEditorPreparing (e) {
@@ -361,7 +361,7 @@ export default {
     // вариант, требующий уникальных ключей
     doubleClickOnRow (e) {
       var component = e.component
-      //console.log(this)
+      // console.log(this)
       function initialClick (context) {
         console.log('initial click for key ' + e.key)
         component.clickCount = 1
@@ -374,7 +374,7 @@ export default {
         let data = {}
         data.event = e
         data.context = context
-        console.log (data)
+        console.log(data)
         context.$refs.form.$emit('doubleClickedRow', data)
         component.clickCount = 0
         component.clickKey = 0
@@ -396,7 +396,7 @@ export default {
     onDoubleClickedRow (data) {
       console.log('1!111!!!!11!!1!!')
 
-      if (data.event.rowType === "data") {
+      if (data.event.rowType === 'data') {
         this.$refs.form.data = data
         this.$refs.form.$refs.modal.show()
       }
