@@ -92,6 +92,8 @@
 
       <dx-data-grid
 
+        :headerFilter = "{ visible: true }"
+
         key-expr="gr6"
 
         ref='refrefref'
@@ -129,6 +131,7 @@
           visible: true,
           applyFilter: 'onClick'
         }"
+        :filterPanel="{ visible: true }"
         :paging="{
             pageSize: 4,
             pageIndex: 1
@@ -340,6 +343,8 @@ export default {
   methods: {
     onFormBack () {
       console.log('@onFormBackEvent!')
+      //
+      // this.$refs.refrefref.
     },
     // ??
     onEditorPreparing (e) {
