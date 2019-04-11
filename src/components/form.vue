@@ -3,7 +3,7 @@
     ref='modal'
   >
 
-    {{ rowIndex }}
+    {{ data.event.rowIndex }}
 
     <b-row>
       <b-button
@@ -43,7 +43,7 @@ export default {
   name: 'formform',
   data () {
     return {
-      data: null,
+      data: {event: {rowIndex: 0}},
       buttons: [
         { caption: '<', state: true},
         { caption: '+', state: false },
@@ -55,7 +55,7 @@ export default {
   methods: {
     onClick: function () {
       console.log('but clicked!')
-      this.$emit('formBack')
+      this.$emit('formBack', this.data.event.rowIndex - 1)
     },
     onClick2: function () {
       console.log('but2 clicked!')
@@ -75,18 +75,11 @@ export default {
       //
     }
   },
-  computed: {
-    rowIndex: function () {
-      if (this.data === null) {
-        console.log('@@@!!@!@#@!@#')
-        return ''
-      }
-      else {
-        console.log('222!!2!232!23')
-        return this.data.event.rowIndex
-      }
-    }
-  }
+  // computed: {
+  //   rowIndex: function() {
+  //     return this.data.event.rowIndex
+  //   }
+  // }
 }
 </script>
 

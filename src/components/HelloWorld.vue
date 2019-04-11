@@ -283,6 +283,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      data: {},
       treeData: [
         { text: 'Item 1' },
         { text: 'Item 2' },
@@ -341,10 +342,14 @@ export default {
     'form-form': formform
   },
   methods: {
-    onFormBack () {
+    onFormBack (ind) {
       console.log('@onFormBackEvent!')
       //
-      // this.$refs.refrefref.
+      this.$data.data.formOpened = true
+      this.$data.data.event.rowIndex = ind
+      // this.$refs.form.$data.data = this.$data.data
+      this.$refs.form.$emit('doubleClickedRow', this.$data.data)
+      this.$refs["refrefref"].instance.focus(this.$refs["refrefref"].instance.getRowElement(ind))
     },
     // ??
     onEditorPreparing (e) {
@@ -376,11 +381,12 @@ export default {
       function doubleClick (context) {
         console.log('second click')
 
-        let data = {}
-        data.event = e
-        data.context = context
-        console.log(data)
-        context.$refs.form.$emit('doubleClickedRow', data)
+        // let data = {}
+        context.data.event = e
+        context.data.context = context
+        context.data.formOpened = false
+        console.log(context.$data.data)
+        context.$refs.form.$emit('doubleClickedRow', context.$data.data)
         component.clickCount = 0
         component.clickKey = 0
         component.clickDate = null
@@ -400,10 +406,13 @@ export default {
 
     onDoubleClickedRow (data) {
       console.log('1!111!!!!11!!1!!')
-
+      let form = this.$refs.form
       if (data.event.rowType === 'data') {
-        this.$refs.form.data = data
-        this.$refs.form.$refs.modal.show()
+        form.data = data
+        console.log(form.data)
+        if (data.formOpened === false) {
+          form.$refs.modal.show()
+        }
       }
     },
 
