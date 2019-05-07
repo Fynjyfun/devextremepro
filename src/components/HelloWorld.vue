@@ -356,6 +356,18 @@ export default {
       if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
         e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number')
       }
+      if (e.parentType === 'dataRow' && e.dataField === 'StateID') {
+         e.editorOptions.itemTemplate = function(itemData, itemIndex, itemElement) {
+            let tooltip = document.createElement("div");
+            let at = document.createAttribute("title");
+            console.log (itemData);
+            console.log (e.editorName);
+            at.value = itemData['name'];
+            tooltip.attributes.setNamedItem(at);
+            tooltip.textContent = itemData['name'];
+            itemElement.appendChild(tooltip);
+         }
+      }
     },
     onContext (e) {
       console.log(e.columnIndex)
