@@ -352,6 +352,32 @@ export default {
       this.$refs["refrefref"].instance.focus(this.$refs["refrefref"].instance.getRowElement(ind))
     },
     // ??
+    // onEditorPreparing (e) {
+    //   // console.log ('q!' + e.editorName);
+    //   // if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
+    //   //     e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number')
+    //   // }
+    //   if ( ( e.parentType === 'dataRow' || e.parentType === 'filterRow') && e.editorName === 'dxSelectBox') {
+    //       e.editorOptions.itemTemplate = function(itemData, itemIndex, itemElement) {
+    //           if (itemData !== null) {
+    //               let tooltip = document.createElement("div");
+    //               let at = document.createAttribute("title");
+    //               // console.log (itemData);
+    //               // console.log ('parent type ' + e.parentType);
+    //               // console.log (e.editorName);
+    //               at.value = itemData['name_user'];
+    //               // TODO: проверять
+    //               // >> it should show the  tooltip only when the character exceeds the width
+    //               // You can check the item text length in the onEditorPreparing event handler and based on this decide whether or not assign the "title" attribute.
+    //               tooltip.attributes.setNamedItem(at);
+    //               tooltip.textContent = itemData['name_user'];
+    //               itemElement.appendChild(tooltip);
+    //           }
+    //       }
+    //       // console.log ('parent type ' + e.parentType);
+    //       // console.log('editorOptions ', e.editorOptions);
+    //   }
+    // },
     onEditorPreparing (e) {
       if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
         e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number')
