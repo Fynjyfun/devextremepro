@@ -1,6 +1,10 @@
 <template>
   <div class="hello">
 
+    <dx-text-box
+      :showClearButton="true"
+    />
+
     <tree>
       data="this.treeData"
     </tree>
@@ -255,7 +259,7 @@ import { datadata } from '../../static/columns.js'
 
 import { dat } from '../../static/cBox.js'
 
-import { DxSelectBox } from 'devextreme-vue'
+import { DxSelectBox, DxTextBox } from 'devextreme-vue'
 
 import {
   DxPivotGrid,
@@ -338,6 +342,7 @@ export default {
     DxEditing,
     DxGroupPanel,
     DxSearchPanel,
+    DxTextBox,
     'tree': LiquorTree,
     'form-form': formform
   },

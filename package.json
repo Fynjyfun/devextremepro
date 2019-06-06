@@ -16,8 +16,8 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.13",
-    "devextreme": "^18.2.6",
-    "devextreme-vue": "^18.2.6",
+    "devextreme": "^18.2.8",
+    "devextreme-vue": "^18.2.8",
     "liquor-tree": "^0.2.53",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
