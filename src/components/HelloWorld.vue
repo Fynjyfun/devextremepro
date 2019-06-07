@@ -148,7 +148,14 @@
               },
                             {
                   column: 'hillname',
-                  summaryType: 'count'
+                  summaryType: 'count',
+              }
+            ],
+            groupItems: [
+              {
+                column:'height',
+                summaryType: 'sum',
+                showInGroupFooter: true
               }
             ]
         }">
