@@ -17,6 +17,7 @@ import 'devextreme/dist/css/dx.light.compact.css'
 Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
+Vue.config.devtools=true;
 
 /* eslint-disable no-new */
 new Vue({

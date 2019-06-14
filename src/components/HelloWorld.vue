@@ -26,6 +26,10 @@
         enabled: true,
         mode: 'dragAndDrop'
       }"
+      :paging= "{
+        pageSize: 3,
+        pageIndex: 1
+      }"
     >
 
       <dx-editing
@@ -35,6 +39,13 @@
         mode="batch"
         :width="500"
       />
+
+    <dx-pager
+      :show-page-size-selector="true"
+      :allowed-page-sizes="pageSizes"
+      :show-info="true"
+      :showNavigationButtons ="true"
+    />
 
     </dx-data-grid>
 
@@ -276,7 +287,7 @@ import {
 import { sales } from '../../static/data.js'
 
 import DxButton from 'devextreme-vue/button'
-import { DxDataGrid, DxLookup, DxEditing, DxGroupPanel, DxSearchPanel } from 'devextreme-vue/data-grid'
+import { DxDataGrid, DxLookup, DxEditing, DxGroupPanel, DxSearchPanel, DxPager} from 'devextreme-vue/data-grid'
 import mj from '../../static/munros.json'
 
 import ruMessages from 'devextreme/localization/messages/ru.json'
@@ -294,6 +305,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      pageSizes: [3, 5, 10],
       data: {},
       treeData: [
         { text: 'Item 1' },
@@ -350,6 +362,7 @@ export default {
     DxGroupPanel,
     DxSearchPanel,
     DxTextBox,
+    DxPager,
     'tree': LiquorTree,
     'form-form': formform
   },
