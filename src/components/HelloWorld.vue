@@ -32,20 +32,20 @@
       }"
     >
 
-      <dx-editing
-        :allow-updating="true"
-        :allow-adding="true"
-        :allow-deleting="true"
-        mode="batch"
-        :width="500"
-      />
+    <dx-editing
+      :allow-updating="true"
+      :allow-adding="true"
+      :allow-deleting="true"
+      mode="batch"
+      :width="500"
+    />
 
-      <dx-state-storing
-        :enabled="true"
-        type="custom"
-        :customLoad= customLoad
-        :customSave= customSave
-      />
+    <dx-state-storing
+      :enabled="true"
+      type="custom"
+      :customLoad= customLoad
+      :customSave= customSave
+    />
 
     <dx-pager
       :show-page-size-selector="true"
@@ -375,6 +375,14 @@ export default {
     'form-form': formform
   },
   methods: {
+    customLoad() {
+      //
+      console.log("CUSTOM LOAD");
+    },
+    customSave(){
+      //
+      console.log("CUSTOM SAVE");
+    },
     onFormBack (ind) {
       console.log('@onFormBackEvent!')
       //
