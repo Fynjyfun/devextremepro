@@ -40,6 +40,13 @@
         :width="500"
       />
 
+      <dx-state-storing
+        :enabled="true"
+        type="custom"
+        :customLoad= customLoad
+        :customSave= customSave
+      />
+
     <dx-pager
       :show-page-size-selector="true"
       :allowed-page-sizes="pageSizes"
@@ -287,7 +294,7 @@ import {
 import { sales } from '../../static/data.js'
 
 import DxButton from 'devextreme-vue/button'
-import { DxDataGrid, DxLookup, DxEditing, DxGroupPanel, DxSearchPanel, DxPager} from 'devextreme-vue/data-grid'
+import { DxDataGrid, DxLookup, DxEditing, DxGroupPanel, DxSearchPanel, DxPager, DxStateStoring} from 'devextreme-vue/data-grid'
 import mj from '../../static/munros.json'
 
 import ruMessages from 'devextreme/localization/messages/ru.json'
@@ -363,6 +370,7 @@ export default {
     DxSearchPanel,
     DxTextBox,
     DxPager,
+    DxStateStoring,
     'tree': LiquorTree,
     'form-form': formform
   },
