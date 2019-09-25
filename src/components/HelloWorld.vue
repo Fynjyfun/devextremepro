@@ -24,7 +24,7 @@
       @editorPreparing="onEditorPreparing"
       :columnChooser= "{
         enabled: true,
-        mode: 'dragAndDrop'
+        mode: 'select'
       }"
       :paging= "{
         pageSize: 3,
