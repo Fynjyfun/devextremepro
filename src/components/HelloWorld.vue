@@ -1,563 +1,108 @@
 <template>
-  <div class="hello">
-
-    <dx-text-box
-      :showClearButton="true"
-    />
-
-    <tree>
-      data="this.treeData"
-    </tree>
-
-    <dx-data-grid
-      :columns="datadata.col"
-      :dataSource="datadata.data"
-      :allowColumnResizing= true
-      :allowColumnReordering= true
-      :selection= "{
-        allowSelectAll: true,
-        mode: 'multiple',
-        showCheckBoxesMode: 'onClick',
-        selectAllMode: 'page'
-      }"
-      key-expr="ID"
-      @editorPreparing="onEditorPreparing"
-      :columnChooser= "{
-        enabled: true,
-        mode: 'select'
-      }"
-      :paging= "{
-        pageSize: 3,
-        pageIndex: 1
-      }"
+  <div>
+    <dx-tab-panel
+      ref="tabpanel"
+      :data-source="tabsList"
+      :selected-index.sync="selectedIndex"
     >
-
-    <dx-editing
-      :allow-updating="true"
-      :allow-adding="true"
-      :allow-deleting="true"
-      mode="batch"
-      :width="500"
-    />
-
-    <dx-state-storing
-      :enabled="true"
-      type="custom"
-      :customLoad= customLoad
-      :customSave= customSave
-    />
-
-    <dx-pager
-      :show-page-size-selector="true"
-      :allowed-page-sizes="pageSizes"
-      :show-info="true"
-      :showNavigationButtons ="true"
-    />
-
-    </dx-data-grid>
-
-    <dx-select-box
-      :items="dat"
-      value-expr= "price"
-      display-expr= "name"
-    />
-
-    <dx-select-box
-      :items="dataSource.store"
-      value-expr= "amount"
-      display-expr= "city"
-    />
-
-<dx-pivot-grid
-      ref="grid"
-      :data-source="dataSource"
-      :allow-sorting-by-summary="true"
-      :allow-filtering="true"
-      :show-borders="true"
-      :show-column-grand-totals="false"
-      :show-row-grand-totals="false"
-      :show-row-totals="false"
-      :show-column-totals="false"
-    >
-
-    <dx-field-chooser
-        :enabled="true"
-        :height="400"
-      />
-
-    </dx-pivot-grid>
-
-<b-row>
-    <b-col sm="3">
-    <h1>{{ msg }}</h1>
-    <img src="../assets/logo.png">
-    </b-col>
-
-    <b-col sm="9">
-    <dx-button
-      :text='text'
-      :onClick="onButClick"
-    />
-    <!-- <div @contextmenu.prevent></div> -->
-
-    <!-- :onContextMenuPreparing="onContext" -->
-    <!-- ОБСУЖДЕНИЕ ДВОЙНОГО КЛИКА -->
-    <!-- https://www.devexpress.com/Support/Center/Question/Details/T143438/dxdatagrid-provide-the-row-double-click-event -->
-
-      <form-form
-        ref="form"
-        v-on:doubleClickedRow="onDoubleClickedRow"
-        v-on:formBack="onFormBack"
+      <div slot="title"
+        slot-scope="{ data: detGrid }"
+        :title= detGrid.obj_title
+      >
+        <span> {{ detGrid.obj_title }} </span>
+      </div>
+      <div slot="item"
+        slot-scope="{ data: detGrid }"
       >
 
-      </form-form>
-
-      <dx-data-grid
-
-        :headerFilter = "{ visible: true }"
-
-        key-expr="gr6"
-
-        ref='refrefref'
-
-        :onRowClick= "doubleClickOnRow"
-
-        :columnChooser= "{
-            enabled: true,
-            mode: 'dragAndDrop'
-        }"
-
-        :loadPanel= "{
-            enabled: true
-        }"
-
-        :rowAlternationEnabled= true
-
-        :grouping= "{
-            contextMenuEnabled: true
-        }"
-
-        :sorting= "{
-            mode: 'multiple'
-        }"
-
-        :selection= "{
-            mode: 'multiple',
-            selectAllMode: 'page'
-        }"
-        :dataSource="datas"
-        :focusedRowEnabled= true
-        :focusedRowIndex= 0
-        :allowColumnReordering= true
-        :filterRow= "{
-          visible: true,
-          applyFilter: 'onClick'
-        }"
-        :filterPanel="{ visible: true }"
-        :paging="{
-            pageSize: 4,
-            pageIndex: 1
-        }"
-        :summary= "{
-            totalItems: [
-              {
-                  column: 'height',
-                  summaryType: 'sum'
-              },
-                            {
-                  column: 'hillname',
-                  summaryType: 'count',
-              }
-            ],
-            groupItems: [
-              {
-                column:'height',
-                summaryType: 'sum',
-                showInGroupFooter: true
-              }
-            ]
-        }">
-
-        <dx-group-panel :visible="true"/>
-        <dx-search-panel :visible="true"/>
-
-      </dx-data-grid>
-    </b-col>
-</b-row>
-
-<b-row>
-  <b-col>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
+        <dx-data-grid
+        :col="tabData[detGrid.obj].grid.cols"
+        :data-source="tabData[detGrid.obj].grid.data"
         >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-  </b-col>
-  <b-col>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-  </b-col>
-</b-row>
+        </dx-data-grid>
+
+      </div>
+    </dx-tab-panel>
+
+    <dx-button
+      text= "Click"
+      @click="onClick"
+    >
+    </dx-button>
   </div>
-
 </template>
 
 <script>
-
-import formform from './form.vue'
-
-import LiquorTree from 'liquor-tree'
-
-import { datadata } from '../../static/columns.js'
-
-import { dat } from '../../static/cBox.js'
-
-import { DxSelectBox, DxTextBox } from 'devextreme-vue'
-
-import {
-  DxPivotGrid,
-  DxFieldChooser
-} from 'devextreme-vue/pivot-grid'
-
-import { sales } from '../../static/data.js'
-
-import DxButton from 'devextreme-vue/button'
-import { DxDataGrid, DxLookup, DxEditing, DxGroupPanel, DxSearchPanel, DxPager, DxStateStoring} from 'devextreme-vue/data-grid'
-import mj from '../../static/munros.json'
-
-import ruMessages from 'devextreme/localization/messages/ru.json'
-
-import { locale, loadMessages } from 'devextreme/localization'
-
-import themes from 'devextreme/ui/themes'
-
-loadMessages(ruMessages)
-locale(navigator.language || navigator.browserLanguage)
-
-var cT, lRCI
+import { DxButton, DxTabPanel, DxDataGrid } from 'devextreme-vue'
 
 export default {
-  name: 'HelloWorld',
   data () {
     return {
-      pageSizes: [3, 5, 10],
-      data: {},
-      treeData: [
-        { text: 'Item 1' },
-        { text: 'Item 2' },
-        { text: 'Item 3', state: { selected: true } },
-        { text: 'Item 4' }
+      // selectedTab
+      selectedTab: {},
+      selectedIndex: null,
+      loadedTabs: {},
+      tabsList: [
+        {
+          obj_key: 'id_planout',
+          obj: 'md_planout',
+          obj_title: 'План расходов сводный'
+        },
+        {
+          obj_key: 'id_plan_delivery',
+          obj: 'md_plan_delivery',
+          obj_title: 'План расходов детальный'
+        }
       ],
-      datadata: datadata,
-      msg: 'Welcome to Your Vue.js App',
-      text: 'Hello!',
-      datas: mj,
-      themeIter: 0,
-      dataSource: {
-        fields: [{
-          caption: 'Region',
-          width: 120,
-          dataField: 'region',
-          area: 'row',
-          sortBySummaryField: 'Total'
-        }, {
-          caption: 'City',
-          dataField: 'city',
-          width: 150,
-          area: 'row'
-        }, {
-          dataField: 'date',
-          dataType: 'date',
-          area: 'column'
-        }, {
-          groupName: 'date',
-          groupInterval: 'month',
-          visible: false
-        }, {
-          caption: 'Total',
-          dataField: 'amount',
-          dataType: 'number',
-          summaryType: 'sum',
-          format: 'currency',
-          area: 'data'
-        }],
-        store: sales
-      },
-      dat: dat
+      tabData: {
+        md_planout: {
+          grid: {
+            cols: [{caption: 'ИД', dataField: 'id_planout'}, {caption: 'Ид. бюджета', dataField: 'id_budget'}],
+            data: [{id_planout: 72, id_budget: 38}, {id_planout: 73, id_budget: 38}]
+          }
+        },
+        md_plan_delivery: {
+          grid: {
+            cols: [{caption: 'Ид. расхода', dataField: 'id_plan_delivery'}, {caption: 'Год', dataField: 'id_year'}],
+            data: [{id_plan_delivery: 54, id_year: 2019}, {id_plan_delivery: 64, id_year: 2019}]
+          }
+        }
+      }
+    }
+  },
+  computed: {
+    instance () {
+      return this.$refs['tabpanel'].instance
     }
   },
   components: {
-    DxButton,
+    DxTabPanel,
     DxDataGrid,
-    DxPivotGrid,
-    DxFieldChooser,
-    DxSelectBox,
-    DxLookup,
-    DxEditing,
-    DxGroupPanel,
-    DxSearchPanel,
-    DxTextBox,
-    DxPager,
-    DxStateStoring,
-    'tree': LiquorTree,
-    'form-form': formform
+    DxButton
   },
   methods: {
-    customLoad() {
-      //
-      console.log("CUSTOM LOAD");
+    onClick (e) {
+      alert('123!')
     },
-    customSave(){
-      //
-      console.log("CUSTOM SAVE");
+    getTabData (index) {
+      return this.$refs['tabpanel'].instance.getDataSource().items()[index]
+    }
+  },
+  watch: {
+    selectedIndex (val, oldVal) {
+      this.selectedTab = { data: this.getTabData(val), index: val }
     },
-    onFormBack (ind) {
-      console.log('@onFormBackEvent!')
-      //
-      this.$data.data.formOpened = true
-      this.$data.data.event.rowIndex = ind
-      // this.$refs.form.$data.data = this.$data.data
-      this.$refs.form.$emit('doubleClickedRow', this.$data.data)
-      this.$refs["refrefref"].instance.focus(this.$refs["refrefref"].instance.getRowElement(ind))
-    },
-    // ??
-    // onEditorPreparing (e) {
-    //   // console.log ('q!' + e.editorName);
-    //   // if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-    //   //     e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number')
-    //   // }
-    //   if ( ( e.parentType === 'dataRow' || e.parentType === 'filterRow') && e.editorName === 'dxSelectBox') {
-    //       e.editorOptions.itemTemplate = function(itemData, itemIndex, itemElement) {
-    //           if (itemData !== null) {
-    //               let tooltip = document.createElement("div");
-    //               let at = document.createAttribute("title");
-    //               // console.log (itemData);
-    //               // console.log ('parent type ' + e.parentType);
-    //               // console.log (e.editorName);
-    //               at.value = itemData['name_user'];
-    //               // TODO: проверять
-    //               // >> it should show the  tooltip only when the character exceeds the width
-    //               // You can check the item text length in the onEditorPreparing event handler and based on this decide whether or not assign the "title" attribute.
-    //               tooltip.attributes.setNamedItem(at);
-    //               tooltip.textContent = itemData['name_user'];
-    //               itemElement.appendChild(tooltip);
-    //           }
-    //       }
-    //       // console.log ('parent type ' + e.parentType);
-    //       // console.log('editorOptions ', e.editorOptions);
-    //   }
-    // },
-    onEditorPreparing (e) {
-      if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-        e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number')
-      }
-      if (e.parentType === 'dataRow' && e.dataField === 'StateID') {
-         e.editorOptions.itemTemplate = function(itemData, itemIndex, itemElement) {
-            let tooltip = document.createElement("div");
-            let at = document.createAttribute("title");
-            console.log (itemData);
-            console.log (e.editorName);
-            at.value = itemData['name'];
-            tooltip.attributes.setNamedItem(at);
-            tooltip.textContent = itemData['name'];
-            itemElement.appendChild(tooltip);
-         }
-      }
-    },
-    onContext (e) {
-      console.log(e.columnIndex)
-      e.items = [
-        {
-          text: 'edit',
-          onItemClick: () => { console.log('item ckicked!!') },
-          onItemContextMenu: () => { console.log('!#@$%$') }
-        }
-      ]
-    },
+    selectedTab: {
+      handler: function (val, oldVal) {
+        //
 
-    // вариант, требующий уникальных ключей
-    doubleClickOnRow (e) {
-      var component = e.component
-      // console.log(this)
-      function initialClick (context) {
-        console.log('initial click for key ' + e.key)
-        component.clickCount = 1
-        component.clickKey = e.key
-        component.clickDate = new Date()
-      }
-      function doubleClick (context) {
-        console.log('second click')
-
-        // let data = {}
-        context.data.event = e
-        context.data.context = context
-        context.data.formOpened = false
-        console.log(context.$data.data)
-        context.$refs.form.$emit('doubleClickedRow', context.$data.data)
-        component.clickCount = 0
-        component.clickKey = 0
-        component.clickDate = null
-      }
-      if ((!component.clickCount) || (component.clickCount !== 1) || (component.clickKey !== e.key)) {
-        initialClick(this)
-      }
-      else if (component.clickKey === e.key) {
-        if (((new Date()) - component.clickDate) <= 300) {
-          doubleClick(this)
-        }
-        else {
-          initialClick(this)
-        }
-      }
-    },
-
-    onDoubleClickedRow (data) {
-      console.log('1!111!!!!11!!1!!')
-      let form = this.$refs.form
-      if (data.event.rowType === 'data') {
-        form.data = data
-        console.log(form.data)
-        if (data.formOpened === false) {
-          form.$refs.modal.show()
-        }
-      }
-    },
-
-    // Вариант без проверки одинаковости строки
-    doubleClickOnRow2 (e) {
-      var component = e.component
-      var prevClickTime = component.lastClickTime
-      component.lastClickTime = new Date()
-      if (prevClickTime && (component.lastClickTime - prevClickTime < 300)) {
-        // Double click code
-        console.log('double click')
-      }
-      else {
-        // Single click code
-        console.log('single click')
-      }
-    },
-
-    // просто не работает
-    doubleClickOnRow3 (e) {
-      var clickTimer = cT
-      var lastRowCLickedId = lRCI
-      // var rows = instance.getSelectedRowsData()
-      if (clickTimer && lastRowCLickedId === e.rowIndex) {
-        clearTimeout(clickTimer)
-        clickTimer = null
-        lastRowCLickedId = e.rowIndex
-        console.log('double')
-      } else {
-        clickTimer = setTimeout(function () {
-          console.log('single')
-        }, 250)
-      }
-      lastRowCLickedId = e.rowIndex
-    },
-    onButClick (e) {
-      if (this.themeIter === 0) {
-        themes.current('generic.mytheme-dark')
-        this.themeIter++
-        console.log(this.themeIter)
-        this.$refs['refrefref'].instance.repaint()
-      } else {
-        themes.current('generic.mytheme-light')
-        this.themeIter--
-        console.log(this.themeIter)
-        this.$refs['refrefref'].instance.repaint()
-      }
+      },
+      deep: true
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
