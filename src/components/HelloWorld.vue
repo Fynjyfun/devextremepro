@@ -16,8 +16,8 @@
       >
 
         <dx-data-grid
-        :col="tabData[detGrid.obj].grid.cols"
-        :data-source="tabData[detGrid.obj].grid.data"
+        :col="cols"
+        :data-source="data"
         >
         </dx-data-grid>
 
@@ -39,6 +39,8 @@ export default {
   data () {
     return {
       // selectedTab
+      cols: [],
+      data: [],
       selectedTab: {},
       selectedIndex: null,
       loadedTabs: {},
@@ -95,7 +97,8 @@ export default {
     selectedTab: {
       handler: function (val, oldVal) {
         //
-
+        this.cols = this.tabData[this.selectedTab.data.obj].grid.cols
+        this.data = this.tabData[this.selectedTab.data.obj].grid.data
       },
       deep: true
     }
