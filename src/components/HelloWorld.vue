@@ -29,15 +29,134 @@
       @click="onClick"
     >
     </dx-button>
+
+    <dx-responsive-box
+
+    >
+    <dx-row :ratio="1"/>
+      <dx-row
+        :ratio="2"
+        screen="xs"
+      />
+      <dx-row :ratio="2"/>
+      <dx-row :ratio="1"/>
+
+      <dx-col :ratio="1"/>
+      <dx-col
+        :ratio="2"
+        screen="lg"
+      />
+      <dx-col :ratio="1"/>
+      <dx-item>
+        <dx-location
+          :row="0"
+          :col="0"
+          :colspan="3"
+          screen="lg"
+        />
+        <dx-location
+          :row="0"
+          :col="0"
+          :colspan="2"
+          screen="sm"
+        />
+        <template #default>
+          <div class="header item">
+            <p>Header</p>
+          </div>
+        </template>
+      </dx-item>
+      <dx-item>
+        <dx-location
+          :row="1"
+          :col="1"
+          screen="lg"
+        />
+        <dx-location
+          :row="1"
+          :col="0"
+          :colspan="2"
+          screen="sm"
+        />
+        <template #default>
+          <div class="content item">
+            <p>Content</p>
+          </div>
+        </template>
+      </dx-item>
+      <dx-item>
+        <dx-location
+          :row="1"
+          :col="0"
+          screen="lg"
+        />
+        <dx-location
+          :row="2"
+          :col="0"
+          screen="sm"
+        />
+        <template #default>
+          <div class="left-side-bar item">
+            <p>Left Bar</p>
+          </div>
+        </template>
+      </dx-item>
+      <dx-item>
+        <dx-location
+          :row="1"
+          :col="2"
+          screen="lg"
+        />
+        <dx-location
+          :row="2"
+          :col="1"
+          screen="sm"
+        />
+        <template #default>
+          <div class="right-side-bar item">
+            <p>Right Bar</p>
+          </div>
+        </template>
+      </dx-item>
+      <dx-item>
+        <dx-location
+          :row="2"
+          :col="0"
+          :colspan="3"
+          screen="lg"
+        />
+        <dx-location
+          :row="3"
+          :col="0"
+          :colspan="2"
+          screen="sm"
+        />
+        <template #default>
+          <div class="footer item">
+            <p>Footer</p>
+          </div>
+        </template>
+      </dx-item>
+
+    </dx-responsive-box>
   </div>
 </template>
 
 <script>
 import { DxButton, DxTabPanel, DxDataGrid } from 'devextreme-vue'
-
+import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vue/responsive-box';
 export default {
   data () {
     return {
+      colsResp: [
+        {},
+        {}
+      ],
+      rowsResp: [
+        {},
+        {},
+        {}
+      ],
       // selectedTab
       cols: [],
       data: [],
@@ -78,6 +197,11 @@ export default {
     }
   },
   components: {
+    DxResponsiveBox,
+    DxItem,
+    DxLocation,
+    DxCol,
+    DxRow,
     DxTabPanel,
     DxDataGrid,
     DxButton
