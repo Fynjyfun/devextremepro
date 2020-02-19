@@ -1,5 +1,19 @@
 <template>
   <div>
+
+    <dx-vector-map>
+    <dx-layer
+      :data-source="mapData"
+      name="areas"
+      type='area'
+    >
+      <dx-label
+        :enabled="true"
+        data-field="name"
+      />
+    </dx-layer>
+    </dx-vector-map>
+
     <dx-tab-panel
       ref="tabpanel"
       :data-source="tabsList"
@@ -31,22 +45,10 @@
     </dx-button>
 
     <dx-responsive-box
-
+      :cols="[{}, {}, {}]"
+      :rows="[{}, {}, {}]"
     >
-    <dx-row :ratio="1"/>
-      <dx-row
-        :ratio="2"
-        screen="xs"
-      />
-      <dx-row :ratio="2"/>
-      <dx-row :ratio="1"/>
 
-      <dx-col :ratio="1"/>
-      <dx-col
-        :ratio="2"
-        screen="lg"
-      />
-      <dx-col :ratio="1"/>
       <dx-item>
         <dx-location
           :row="0"
@@ -144,10 +146,13 @@
 
 <script>
 import { DxButton, DxTabPanel, DxDataGrid } from 'devextreme-vue'
-import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vue/responsive-box';
+import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vue/responsive-box'
+import { DxVectorMap, DxLabel, DxLayer } from 'devextreme-vue/vector-map'
+import * as mData from '../../static/admin_level_4.json'
 export default {
   data () {
     return {
+      mapData: mData,
       colsResp: [
         {},
         {}
@@ -197,6 +202,9 @@ export default {
     }
   },
   components: {
+    DxLayer,
+    DxLabel,
+    DxVectorMap,
     DxResponsiveBox,
     DxItem,
     DxLocation,
