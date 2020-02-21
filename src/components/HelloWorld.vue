@@ -1,7 +1,12 @@
 <template>
   <div>
-
-    <dx-vector-map>
+<!-- :bounds="bounds" -->
+    <dx-vector-map
+      @initialized="onInit"
+      @zoom-factor-changed="onZoomFactorChanged"
+      @center-changed="onCenterChanged"
+      :projection='customProjection'
+    >
     <dx-layer
       :data-source="mapData"
       name="areas"
@@ -149,9 +154,43 @@ import { DxButton, DxTabPanel, DxDataGrid } from 'devextreme-vue'
 import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vue/responsive-box'
 import { DxVectorMap, DxLabel, DxLayer } from 'devextreme-vue/vector-map'
 import * as mData from '../../static/admin_level_4.json'
+
+var shift = -30
+var border = (180 + shift) / 180
+
 export default {
   data () {
     return {
+      vectorMap: null,
+      bounds: [-180, 85, 180, -60],
+      customProjection: {
+        aspectRatio: 1,
+        to ([l, lt]) {
+          let x
+          if (l > 0) {
+            x = (l + shift) / 180
+          } else {
+            // ((a % b) + b) % b = a mod b (св - во неотрицательности)
+            x = (180 + shift + ((l % 180) + 180) % 180) / 180
+          }
+          return [
+            x,
+            lt / 90
+          ]
+        },
+        from ([x, y]) {
+          let lonx
+          if (x > border) {
+            lonx = (-1 + x - border) * 180
+          } else {
+            lonx = x * 180 - shift
+          }
+          return [
+            lonx,
+            y * 90
+          ]
+        }
+      },
       mapData: mData,
       colsResp: [
         {},
@@ -215,6 +254,20 @@ export default {
     DxButton
   },
   methods: {
+    onCenterChanged (e) {
+      //
+      console.log('ON CENTER CHANGED: ', e.center)
+    },
+    onInit (e) {
+      this.vectorMap = e.component
+    },
+    onZoomFactorChanged (e) {
+      //
+      // console.log('COORDS: ', this.vectorMap.viewport())
+      // console.log('center: ', this.vectorMap.center())
+      // this.vectorMap.center([0, 0])
+      // console.log('center new: ', this.vectorMap.center())
+    },
     onClick (e) {
       alert('123!')
     },
