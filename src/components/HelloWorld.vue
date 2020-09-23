@@ -1,296 +1,318 @@
 <template>
-  <div>
-<!-- :bounds="bounds" -->
-    <dx-vector-map
-      @initialized="onInit"
-      @zoom-factor-changed="onZoomFactorChanged"
-      @center-changed="onCenterChanged"
-      :projection='customProjection'
-    >
-    <dx-layer
-      :data-source="mapData"
-      name="areas"
-      type='area'
-    >
-      <dx-label
-        :enabled="true"
-        data-field="name"
-      />
-    </dx-layer>
-    </dx-vector-map>
-
-    <dx-tab-panel
-      ref="tabpanel"
-      :data-source="tabsList"
-      :selected-index.sync="selectedIndex"
-    >
-      <div slot="title"
-        slot-scope="{ data: detGrid }"
-        :title= detGrid.obj_title
+<div>
+    <DxCheckBox
+      :value="true"
+      :width="80"
+      text="Check"
+    />
+    <dx-popup
+        width="70%"
+        height="53%"
+        :title="mapTitle"
+        :close-on-back-button="false"
+        :close-on-outside-click="false"
+        :show-close-button="false"
+        :visible="true"
+        shading-color="rgba(125,125,125,0.5)"
+        :resize-enabled="true"
       >
-        <span> {{ detGrid.obj_title }} </span>
-      </div>
-      <div slot="item"
-        slot-scope="{ data: detGrid }"
-      >
+      <template slot="title">
+          <div class="p-0 kw-popup-title">
+              <h5 class="pt-2 pl-3 kw-popup-chapter">
+                  {{ mapTitle }}
+              </h5>
+              <!-- инструментальная панель -->
+              <dx-toolbar
+                  class="kw-toolbar"
+                  :items.sync="toolbar">
+              </dx-toolbar>
+          </div>
+      </template>
+      <template slot="content">
+        <div style="overflow: hidden; height: 100%;" class="kw-content">
 
-        <dx-data-grid
-        :col="cols"
-        :data-source="data"
-        >
-        </dx-data-grid>
+                  <!-- :tooltip="{enabled: true, customizeTooltip: customizeTooltip}" -->
+                <dx-vector-map
+                  :element-attr="attr"
+                  @click="onMapClick"
+                  @initialized="onInit"
+                  :center="center"
+                  :projection='customProjection'
+                  @zoom-factor-changed="onZoomFactorChanged"
+                  :zoom-factor="zFactor"
+                  :zooming-enabled="true"
+                >
+                  <dx-layer
+                    :data-source="mDat"
+                    name="areas"
+                    type='area'
+                  >
+                    <dx-label
+                      :enabled="regionLabelsVis"
+                      data-field="name"
+                    />
+                  </dx-layer>
+                  <dx-layer
+                    elementType='dot'
+                    :data-source="mDt"
+                    name="markers"
+                    type='marker'
+                  >
+                    <dx-label
+                      :enabled="citiesLabelsVis"
+                      data-field="name"
+                    />
+                  </dx-layer>
+                  <dx-tooltip
+                    :enabled="true"
+                    :customize-tooltip="customizeTooltip"
+                    :z-index='10000'
+                  />
+                </dx-vector-map>
 
-      </div>
-    </dx-tab-panel>
+          <dx-responsive-box
+            id="responsiveBoxID"
+          >
 
-    <dx-button
-      text= "Click"
-      @click="onClick"
+          <dx-row :ratio="1"/>
+
+          <dx-col :ratio="4"/>
+          <dx-col :ratio="1"/>
+
+          <dx-item>
+            <dx-location
+              :row="0"
+              :col="0"
+              :colspan="4"
+            />
+            <template #default>
+
+
+
+
+            </template>
+          </dx-item>
+
+          <dx-item>
+            <dx-location
+              :row="0"
+              :col="1"
+              :colspan="1"
+            />
+            <template #default>
+              <!--  -->
+              <!-- <DxCheckBox
+                :value="true"
+                :width="80"
+                text="Check"
+              /> -->
+            </template>
+          </dx-item>
+
+        </dx-responsive-box>
+        </div>
+        </template>
+    </dx-popup>
+
+    <kw-region-info
+      v-if="regionInfoVis"
+      @closedialog="onRegionInfoClose"
+      :name="regionName"
     >
-    </dx-button>
-
-    <dx-responsive-box
-      :cols="[{}, {}, {}]"
-      :rows="[{}, {}, {}]"
-    >
-
-      <dx-item>
-        <dx-location
-          :row="0"
-          :col="0"
-          :colspan="3"
-          screen="lg"
-        />
-        <dx-location
-          :row="0"
-          :col="0"
-          :colspan="2"
-          screen="sm"
-        />
-        <template #default>
-          <div class="header item">
-            <p>Header</p>
-          </div>
-        </template>
-      </dx-item>
-      <dx-item>
-        <dx-location
-          :row="1"
-          :col="1"
-          screen="lg"
-        />
-        <dx-location
-          :row="1"
-          :col="0"
-          :colspan="2"
-          screen="sm"
-        />
-        <template #default>
-          <div class="content item">
-            <p>Content</p>
-          </div>
-        </template>
-      </dx-item>
-      <dx-item>
-        <dx-location
-          :row="1"
-          :col="0"
-          screen="lg"
-        />
-        <dx-location
-          :row="2"
-          :col="0"
-          screen="sm"
-        />
-        <template #default>
-          <div class="left-side-bar item">
-            <p>Left Bar</p>
-          </div>
-        </template>
-      </dx-item>
-      <dx-item>
-        <dx-location
-          :row="1"
-          :col="2"
-          screen="lg"
-        />
-        <dx-location
-          :row="2"
-          :col="1"
-          screen="sm"
-        />
-        <template #default>
-          <div class="right-side-bar item">
-            <p>Right Bar</p>
-          </div>
-        </template>
-      </dx-item>
-      <dx-item>
-        <dx-location
-          :row="2"
-          :col="0"
-          :colspan="3"
-          screen="lg"
-        />
-        <dx-location
-          :row="3"
-          :col="0"
-          :colspan="2"
-          screen="sm"
-        />
-        <template #default>
-          <div class="footer item">
-            <p>Footer</p>
-          </div>
-        </template>
-      </dx-item>
-
-    </dx-responsive-box>
-  </div>
+    </kw-region-info>
+</div>
 </template>
 
 <script>
-import { DxButton, DxTabPanel, DxDataGrid } from 'devextreme-vue'
-import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vue/responsive-box'
-import { DxVectorMap, DxLabel, DxLayer } from 'devextreme-vue/vector-map'
-import * as mData from '../../static/admin_level_4.json'
+import { DxCheckBox } from 'devextreme-vue/check-box'
+import { DxPopup, DxToolbar, DxDrawer } from "devextreme-vue"
+import {
+  DxResponsiveBox,
+  DxItem,
+  DxLocation,
+  DxCol,
+  DxRow
+} from 'devextreme-vue/responsive-box';
+import { DxVectorMap, DxLabel, DxLayer, DxTooltip } from 'devextreme-vue/vector-map'
+import KwRegionInfo from './KwRegionInfo.vue'
+import * as mData from './admin_level_4.json'
+import * as mD from './city.json'
 
 var shift = 30
 var border = (180 + shift) / 180
 
 export default {
-  data () {
-    return {
-      vectorMap: null,
-      bounds: [-180, 85, 180, -60],
-      customProjection: {
-        aspectRatio: 1,
-        to ([l, lt]) {
-          let x
-          if (l > 0) {
-            x = (l + shift) / 180
+    props: {
+        type    : String,
+    },
+    data() {
+        return {
+            regionLabelsVis: false,
+            citiesLabelsVis: true,
+            citiesVisZFactor: 45,
+            zFactor: 6,
+            regionName: null,
+            regionInfoVis: false,
+            toolbar: [
+                {
+                    location: 'after',
+                    widget: 'dxButton',
+                    disabled: false,
+                    options: {
+                        elementAttr: {
+                            id: "close",
+                            class: "mx-auto"
+                        },
+                        icon: "fas fa-door-closed",
+                        hint: "Закрыть",
+                        onClick: () => {
+                            this.$emit("closedialog")
+                        }
+                    }
+                }
+            ],
+            center: [92, 60],
+            vectorMap: null,
+            customProjection: {
+              aspectRatio: 1,
+              to ([l, lt]) {
+                let x
+                if (l > 0) {
+                  x = (l + shift) / 180
+                } else {
+                  // ((a % b) + b) % b = a mod b (св - во неотрицательности)
+                  x = (180 + shift + ((l % 180) + 180) % 180) / 180
+                }
+                return [
+                  x,
+                  lt / 90
+                ]
+              },
+              from ([x, y]) {
+                let lonx
+                if (x > border) {
+                  lonx = (-1 + x - border) * 180
+                } else {
+                  lonx = x * 180 - shift
+                }
+                return [
+                  lonx,
+                  y * 90
+                ]
+              }
+            },
+            mDat: null, // регионы
+            mDt: null // маркеры городов
+        }
+    },
+    components: {
+        DxToolbar,
+        DxTooltip,
+        DxPopup,
+        DxVectorMap,
+        DxLabel,
+        DxLayer,
+        KwRegionInfo,
+        DxResponsiveBox,
+        DxItem,
+        DxLocation,
+        DxCol,
+        DxRow,
+        DxCheckBox,
+        DxDrawer
+    },
+    computed: {
+        cityDs: function () {
+          let cityDs = [];
+          mD.forEach(city => {
+            if (city.population > 200000) {
+              cityDs.push({coordinates: [city.geo_lon, city.geo_lat], attributes: {name: city.city}});
+            }
+          });
+          return cityDs;
+        },
+        getRegionColor: function () {
+          return this.getCssProp('--region-color-map-6-level');
+        },
+        getBackground: function () {
+          return { borderColor: this.getCssProp('--background-border-color-map-6-level'), color: this.getCssProp('--background-color-map-6-level') };
+        },
+        getHoveredColor: function () {
+          return this.getCssProp('--hover-color-map-6-level');
+        },
+        getBorderColor: function () {
+          return this.getCssProp('--border-color-map-6-level');
+        },
+        getHoveredBorderColor: function () {
+          return this.getCssProp('--hovered-border-color-map-6-level');
+        },
+        attr: function () {
+            return {
+                    style: 'width: 100%; height: 100%;'
+            }
+        },
+        mapTitle: function() {
+            switch(this.type) {
+                case 'Карта субъектов федерации' :
+                    return 'Карта субъектов федерации'
+                case 'Карта федеральных округов':
+                    return 'Карта федеральных округов'
+                default:
+                    return 'Карта'
+            }
+        },
+    },
+    methods: {
+        onZoomFactorChanged (e) {
+          console.log("ZFCH: ", e);
+          if (e.zoomFactor > this.citiesVisZFactor) {
+            this.mDt = this.cityDs;
           } else {
-            // ((a % b) + b) % b = a mod b (св - во неотрицательности)
-            x = (180 + shift + ((l % 180) + 180) % 180) / 180
-          }
-          return [
-            x,
-            lt / 90
-          ]
-        },
-        from ([x, y]) {
-          let lonx
-          if (x > border) {
-            lonx = (-1 + x - border) * 180
-          } else {
-            lonx = x * 180 - shift
-          }
-          return [
-            lonx,
-            y * 90
-          ]
-        }
-      },
-      mapData: mData,
-      colsResp: [
-        {},
-        {}
-      ],
-      rowsResp: [
-        {},
-        {},
-        {}
-      ],
-      // selectedTab
-      cols: [],
-      data: [],
-      selectedTab: {},
-      selectedIndex: null,
-      loadedTabs: {},
-      tabsList: [
-        {
-          obj_key: 'id_planout',
-          obj: 'md_planout',
-          obj_title: 'План расходов сводный'
-        },
-        {
-          obj_key: 'id_plan_delivery',
-          obj: 'md_plan_delivery',
-          obj_title: 'План расходов детальный'
-        }
-      ],
-      tabData: {
-        md_planout: {
-          grid: {
-            cols: [{caption: 'ИД', dataField: 'id_planout'}, {caption: 'Ид. бюджета', dataField: 'id_budget'}],
-            data: [{id_planout: 72, id_budget: 38}, {id_planout: 73, id_budget: 38}]
+            this.mDt = null;
           }
         },
-        md_plan_delivery: {
-          grid: {
-            cols: [{caption: 'Ид. расхода', dataField: 'id_plan_delivery'}, {caption: 'Год', dataField: 'id_year'}],
-            data: [{id_plan_delivery: 54, id_year: 2019}, {id_plan_delivery: 64, id_year: 2019}]
-          }
+        onRegionInfoClose () {
+          this.regionInfoVis = false;
+        },
+        getCssProp (prop) {
+          return getComputedStyle(document.querySelector(':root')).getPropertyValue(prop);
+        },
+        customizeTooltip (e) {
+          return {text: e.attribute('name')};
+        },
+        onMapClick (e) {
+          this.regionName = e.target.attribute('name');
+          this.regionInfoVis = true;
+        },
+        onInit (e) {
+          this.vectorMap = e.component;
+          this.vectorMap.zoomFactor(6);
+        },
+        onHidden() {
+
         }
-      }
+    },
+    created() {
+      this.mDat = mData;
+      console.log("mD: ", mD);
     }
-  },
-  computed: {
-    instance () {
-      return this.$refs['tabpanel'].instance
-    }
-  },
-  components: {
-    DxLayer,
-    DxLabel,
-    DxVectorMap,
-    DxResponsiveBox,
-    DxItem,
-    DxLocation,
-    DxCol,
-    DxRow,
-    DxTabPanel,
-    DxDataGrid,
-    DxButton
-  },
-  methods: {
-    onCenterChanged (e) {
-      //
-      console.log('ON CENTER CHANGED: ', e.center)
-    },
-    onInit (e) {
-      this.vectorMap = e.component
-    },
-    onZoomFactorChanged (e) {
-      //
-      // console.log('COORDS: ', this.vectorMap.viewport())
-      // console.log('center: ', this.vectorMap.center())
-      // this.vectorMap.center([0, 0])
-      // console.log('center new: ', this.vectorMap.center())
-    },
-    onClick (e) {
-      alert('123!')
-    },
-    getTabData (index) {
-      return this.$refs['tabpanel'].instance.getDataSource().items()[index]
-    }
-  },
-  watch: {
-    selectedIndex (val, oldVal) {
-      this.selectedTab = { data: this.getTabData(val), index: val }
-    },
-    selectedTab: {
-      handler: function (val, oldVal) {
-        //
-        this.cols = this.tabData[this.selectedTab.data.obj].grid.cols
-        this.data = this.tabData[this.selectedTab.data.obj].grid.data
-      },
-      deep: true
-    }
-  }
 }
 </script>
 
 <style scoped>
-
+div.kw-title {
+    box-sizing: border-box;
+    background-color: rgb(59, 126, 165);
+    color: white;
+}
+h5.kw-chapter {
+    font-weight: bolder;
+    padding-top: 5px;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.9rem;
+}
+.kw-alert-msg {
+    overflow-y: auto;
+    height: 100%;
+}
 </style>
