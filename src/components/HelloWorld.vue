@@ -155,7 +155,7 @@ import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vu
 import { DxVectorMap, DxLabel, DxLayer } from 'devextreme-vue/vector-map'
 import * as mData from '../../static/admin_level_4.json'
 
-var shift = -30
+var shift = 30
 var border = (180 + shift) / 180
 
 export default {
